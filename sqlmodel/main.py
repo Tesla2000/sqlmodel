@@ -24,6 +24,7 @@ from typing import (
 
 from pydantic import BaseModel, EmailStr
 from pydantic.fields import FieldInfo as PydanticFieldInfo
+from pydantic.networks import AnyUrl
 from sqlalchemy import (
     Boolean,
     Column,
@@ -705,6 +706,7 @@ def get_sqlalchemy_type(field: Any) -> Any:
             ipaddress.IPv6Network,
             Path,
             EmailStr,
+            AnyUrl,
         ),
     ):
         max_length = getattr(metadata, "max_length", None)
