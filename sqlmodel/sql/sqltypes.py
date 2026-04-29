@@ -14,3 +14,8 @@ class AutoString(types.TypeDecorator):
         if impl.length is None and dialect.name == "mysql":
             return dialect.type_descriptor(types.String(self.mysql_default_length))
         return super().load_dialect_impl(dialect)
+
+    def process_bind_param(self, value: Any, dialect: Dialect) -> Any:
+        if value is None:
+            return value
+        return str(value)
