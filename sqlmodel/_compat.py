@@ -21,11 +21,11 @@ from pydantic import VERSION as P_VERSION
 from pydantic import BaseModel
 from pydantic import ConfigDict as ConfigDict
 from pydantic._internal._fields import PydanticMetadata
-from pydantic._internal._model_construction import ModelMetaclass as ModelMetaclass
-from pydantic._internal._repr import Representation as Representation
 from pydantic.fields import FieldInfo
+from pydantic_core import InitErrorDetails
 from pydantic_core import PydanticUndefined as Undefined
 from pydantic_core import PydanticUndefinedType as PydanticUndefinedType
+from pydantic_core import ValidationError as PydanticValidationError
 
 BaseConfig = ConfigDict
 UndefinedType = PydanticUndefinedType
@@ -236,6 +236,25 @@ def sqlmodel_table_construct(
     if _fields_set is None:
         _fields_set = set(fields_values.keys())
     fields_values.update(defaults)
+
+    # Validate that all required fields are present
+    missing_fields = [
+        name
+        for name, field in cls.model_fields.items()
+        if field.is_required() and name not in fields_values
+    ]
+    if missing_fields:
+        raise PydanticValidationError.from_exception_data(
+            cls.__name__,
+            [
+                InitErrorDetails(
+                    type="missing",
+                    loc=(field_name,),
+                    input=values,
+                )
+                for field_name in missing_fields
+            ],
+        )
 
     _extra: dict[str, Any] | None = None
     if cls.model_config.get("extra") == "allow":

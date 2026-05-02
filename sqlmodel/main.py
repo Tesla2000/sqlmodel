@@ -55,10 +55,7 @@ from typing_extensions import deprecated
 from ._compat import (
     PYDANTIC_MINOR_VERSION,
     BaseConfig,
-    ModelMetaclass,
-    Representation,
     SQLModelConfig,
-    Undefined,
     UndefinedType,
     finish_init,
     get_annotations,
@@ -75,10 +72,11 @@ from ._compat import (
 from .sql.sqltypes import AutoString
 
 if TYPE_CHECKING:
-    from pydantic._internal._model_construction import ModelMetaclass as ModelMetaclass
-    from pydantic._internal._repr import Representation as Representation
     from pydantic_core import PydanticUndefined as Undefined
     from pydantic_core import PydanticUndefinedType as UndefinedType
+
+from pydantic._internal._model_construction import ModelMetaclass
+from pydantic._internal._repr import Representation
 
 _T = TypeVar("_T")
 NoArgAnyCallable = Callable[[], Any]

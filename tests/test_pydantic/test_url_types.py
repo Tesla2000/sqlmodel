@@ -1,4 +1,5 @@
-from pydantic import BaseModel, HttpUrl
+import pytest
+from pydantic import BaseModel, HttpUrl, ValidationError
 from sqlmodel import Field, Session, SQLModel, create_engine, select
 
 from typing import ClassVar
