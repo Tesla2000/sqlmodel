@@ -25,6 +25,8 @@ from typing import (
 from pydantic import BaseModel, EmailStr
 from pydantic.fields import FieldInfo as PydanticFieldInfo
 from pydantic.networks import AnyUrl
+from pydantic_core import PydanticUndefined as Undefined
+from pydantic_core import PydanticUndefinedType as UndefinedType
 from sqlalchemy import (
     Boolean,
     Column,
@@ -56,7 +58,6 @@ from ._compat import (
     PYDANTIC_MINOR_VERSION,
     BaseConfig,
     SQLModelConfig,
-    UndefinedType,
     finish_init,
     get_annotations,
     get_field_metadata,
@@ -70,10 +71,6 @@ from ._compat import (
     sqlmodel_validate,
 )
 from .sql.sqltypes import AutoString
-
-if TYPE_CHECKING:
-    from pydantic_core import PydanticUndefined as Undefined
-    from pydantic_core import PydanticUndefinedType as UndefinedType
 
 from pydantic._internal._model_construction import ModelMetaclass
 from pydantic._internal._repr import Representation
